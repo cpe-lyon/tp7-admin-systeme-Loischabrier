@@ -1,131 +1,124 @@
 Loïs CHABRIER
 
-# _TP 3 - Gestion des paquets_
+# _TP 7 - Boot, services et processus / Tâches d’administration (2)_
 
-## Exercice 1. Commandes de base
-
-<br>
-<span style='color:red'></span> Commencez par mettre à jour votre système avec les commandes vues dans le cours.
-</span>
-
-`sudo apt upgrade` puis `sudo apt update`
-
-<span style='color:red'>1.</span> Quels sont les 5 derniers paquets installés sur votre machine ?
-
-  - `snapd.list`
-  - `sosreport.list`
-  - `ubuntu-server.list`
-  - `unattended-upgrades.list`
-  - `cloud-init.list`
-
-<span style='color:red'>2.</span> Utiliser dpkg et apt pour compter le nombre de paquets installés (ne pas hésiter à consulter le manuel !). Comment explique-t-on la (petite) différence de comptage ?
-
-Pour 'dpkg' : `dpkg --list | wc --lines` (524 ici)
-Pour 'apt' : `apt list --installed | wc --lines` (520 ici)
+## Exercice 1. Personnalisation de GRUB
 
 
-<span style='color:red'>3.</span> Combien de paquets sont disponibles en téléchargement ?
-
-Il faut faire : `apt list | wc -l`
-
-<span style='color:red'>4.</span> Créer un alias “maj” qui met à jour le système.
-
-Dans `~/.bashrc` : `alias maj="sudo apt update && sudo apt upgrade"`
-
-<span style='color:red'>5.</span> A quoi sert le paquet fortunes ? Installez-le.
-
-Il sert à afficher des proverbes ou des citations dans le terminal. Pour l'installer, il faut taper `sudo apt install fortune-mod`.
-
-<span style='color:red'>6.</span> Quels paquets proposent de jouer au sudoku ?
-
-Grâce à la commande `apt search sudoku`, on obtient tout les paquets qui proposent le sudoku.
-
-      fltk1.1-games/disco 1.1.10-26ubuntu1 amd64
-        Boîte à outils Fast Light - exemples de jeux : jeux de dames, sudoku
-
-      fltk1.3-games/disco 1.3.4-9ubuntu1 amd64
-        Boîte à outils Fast Light - exemples de jeux : jeux de dames, sudoku
-
-      gnome-sudoku/disco 1:3.32.0-1 amd64
-        Casse-tête Sudoku pour GNOME
-
-      hitori/disco 3.31.0-1 amd64
-        Jeu de puzzle logique similaire au sudoku
-
-      ksudoku/disco 4:18.12.3-0ubuntu1 amd64
-        Jeu et Solveur de Sudoku
-
-      libqqwing-dev/disco 1.3.4-1.1 amd64
-        outil pour générer et résoudre des casse-tête Sudoku (développement)
-
-      libqqwing2v5/disco 1.3.4-1.1 amd64
-        outil pour générer et résoudre des casse-tête Sudoku (bibliothèque)
-
-      nudoku/disco 1.0.0-1 amd64
-        ncurses based sudoku games
-
-      qqwing/disco 1.3.4-1.1 amd64
-        tool for generating and solving Sudoku puzzles (application)
-
-      sudoku/disco 1.0.5-2build3 amd64
-        Sudoku en mode console
-
-      texlive-games/disco 2018.20190227-1 all
-        TeX Live : Composition de jeux
+<span style='color:red'>1.</span> Commencez par changer l’extension du fichier /etc/default/grub.d/50-curtin-settings.cfg s’il
+est présent dans votre environnement (vous pouvez aussi commenter son contenu).
 
 
-<span style='color:red'>7.</span> Lister les derniers paquets installés explicitement avec la commande `apt install`
+<span style='color:red'>2.</span> Modifiez le fichier /etc/default/grub pour que le menu de GRUB s’affiche pendant 10 secondes ;
+passé ce délai, le premier OS du menu doit être lancé automatiquement.
 
-`grep "apt install" /var/log/apt/history.log`
 
-## Exercice 2.
+<span style='color:red'>3.</span> Lancez la commande update-grub
 
-A partir de quel paquet est installée la commande ls ? Comment obtenir cette information en une seule
-commande, pour n’importe quel programme (indice : la réponse est dans le poly de cours 2, dans la liste des
-commandes utiles) ? Utilisez la réponse à pour écrire un script appelé origine-commande (sans l’extension .sh) prenant en argument le nom d’une commande, et indiquant quel paquet l’a installée.
 
-`which -a ls | xargs dpkg -s 2>/dev/null`
+<span style='color:red'>4.</span> Redémarrez votre VM pour valider que les changements ont bien été pris en compte
 
-        if [ -z "$1" ]; then
-              echo "Veuillez fournir un nom de commande"
-        else
-              dpkg -S $(which "$1");
-        fi
+
+<span style='color:red'>5.</span> On va augmenter la résolution de GRUB et de notre VM. Cherchez sur Internet le ou les paramètres
+à rajouter au fichier grub.
+
+
+<span style='color:red'>6.</span> On va à présent ajouter un fond d’écran. Il existe un paquet en proposant quelques uns : grub2-splash-images (après installation, celles-ci sont disponibles dans /usr/share/images/grub).
+
+
+<span style='color:red'>7.</span> Il est également possible de configurer des thèmes. On en trouve quelques uns dans les dépôts (grub2-themes-*). Installez-en un.
+
+
+<span style='color:red'>8.</span> Ajoutez une entrée permettant d’arrêter la machine, et une autre permettant de la redémarrer.
+
+
+<span style='color:red'>9.</span> Configurer GRUB pour que le clavier soit en français
+
+
+## Exercice 2. Noyau
+
+<span style='color:red'>1.</span> Commencez par installer le paquet build-essential, qui contient tous les outils nécessaires (compi-
+lateurs, bibliothèques) à la compilation de programmes en C (entre autres).
+
+
+<span style='color:red'>2.</span> Créez un fichier hello.c contenant le code suivant :
+
+
+<span style='color:red'>3.</span> Créez également un fichier Makefile :
+
+
+<span style='color:red'>4.</span> Compilez le module à l’aide de la commande make, puis installez-le à l’aide de la commande make
+install.
+
+
+<span style='color:red'>5.</span> Chargez le module ; vérifiez dans le journal du noyau que le message ”La fonction init_module() est
+appelée” a bien été inscrit, synonyme que le module a été chargé ; confirmez avec la commande lsmod.
+
+
+<span style='color:red'>6.</span> Utilisez la commande modinfo pour obtenir des informations sur le module hello.ko ; vous devriez
+notamment voir les informations figurant dans le fichier C.
+
+
+<span style='color:red'>7.</span> Déchargez le module ; vérifiez dans le journal du noyau que le message ”La fonction cleanup_module()
+est appelée” a bien été inscrit, synonyme que le module a été déchargé ; confirmez avec la commande lsmod.
+
+
+<span style='color:red'>8.</span> Pour que le module soit chargé automatiquement au démarrage du système, il faut l’inscrire dans le
+fichier /etc/modules. Essayez, et vérifiez avec la commande lsmod après redémarrage de la machine.
+
 
 ## Exercice 3.
 
-Ecrire une commande qui affiche “INSTALLÉ” ou “NON INSTALLÉ” selon le nom et le statut du package
-spécifié dans cette commande.
+<span style='color:red'>1.</span> Commencez par écrire un script qui recopie dans un fichier tmp.txt chaque ligne saisie au clavier par
+l’utilisateur
 
-`(dpkg -l "nom_package" | grep "^ii") && echo "installé" || echo "non installé"`
 
-## Exercice 4.
+<span style='color:red'>2.</span> Lancez votre script et appuyez sur CTRL+Z. Que se passe-t-il ? Comment faire pour que le script pour-
+suive son exécution ?
 
-Lister les programmes livrés avec coreutils. A quoi sert la commande ’[’ et comment afficher ce qu’elle
-retourne ?
 
-`apt show coreutils` pour lister les programmes.
-`[` est l'équivalent de `test`.
+<span style='color:red'>3.</span> Toujours pendant l’exécution du script, appuyez sur CTRL+C. Que se passe-t-il ?
 
-## Exercice 5.
 
-Installez le paquet emacs à l’aide de la version graphique d’aptitude.
+<span style='color:red'>4.</span> Modifiez votre script pour redéfinir les actions à effectuer quand le script reçoit les signaux SIGTSTP (= CTRL+Z) et SIGINT (= CTRL+C) : dans le premier cas, il doit afficher ”Impossible de me placer en
+arrière-plan”, et dans le second cas, il doit afficher ”OK, je fais un peu de ménage avant” avant de
+supprimer le fichier temporaire et terminer le script.
 
-Taper `aptitude` 
-Ensuite taper `/` pour chercher le paquet emacs 
-Sélectionner le paquets emacs 
-Puis + ig <entré> g et le paquet s'installe. 
 
-## Exercice 6.
+<span style='color:red'>5.</span> Testez le nouveau comportement de votre script en utilisant d’une part les raccourcis clavier, d’autre
+part la commande kill
 
-Installer la version Oracle de Java (avec l’ajout des PPA)
 
-    sudo add-apt-repository ppa:linuxuprising/java
-    sudo apt update
-    sudo apt install oracle-java12-installer
+<span style='color:red'>6.</span> Relancez votre script et faites immédiatement un CTRL+C : vous obtenez un message d’erreur vous
+indiquant que le fichier tmp.txt n’existe pas. A l’aide de la commande interne test, corrigez votre script pour que ce message n’apparaisse plus.
 
-Vérifiez qu’un nouveau fichier a été créé dans /etc/apt/sources.list.d. Que contient-il ?
 
-    cd /etc/apt/source.list.d
-    ls
-    linuxuprising-ubuntu-java-disco.list
+## Exercice 4. Surveillance de l’activité du système
+
+<span style='color:red'>1.</span> Dans tty1, lancez la commande htop, puis tapez la commande w dans tty2. Qu’affiche cette com-
+mande ?
+
+
+<span style='color:red'>2.</span> Comment afficher l’historique des dernières connexions à la machine ?
+
+
+<span style='color:red'>3.</span> Quelle commande permet d’obtenir la version du noyau ?
+
+
+<span style='color:red'>4.</span> Comment récupérer toutes les informations sur le processeur, au format JSON ?
+
+
+<span style='color:red'>5.</span> Comment obtenir la liste des derniers démarrages de la machine avec la commande journalctl ?
+Comment afficher tout ce qu’il s’est passé sur la machine lors de l’avant-dernier boot ?
+
+
+<span style='color:red'>6.</span> Comment obtenir la liste des derniers démarrages de la machine avec la commande journalctl ?
+
+
+<span style='color:red'>7.</span> Faites en sortes que lors d’une connexion à la machine, les utilisateurs soient prévenus par un message à l’écran d’une maintenance le 26 mars à minuit. Editer le fichier /etc/motd
+
+
+<span style='color:red'>8.</span> Ecrivez un script bash qui permet de calculer le k-ième nombre de Fibonacci : Fk = Fk−1 + Fk−2,
+avec F0 = F1 = 1. Lancez le calcul de F100 puis lancez la commande tload depuis un autre terminal
+virtuel. Que constatez-vous ? Interrompez ensuite le calcul avec CTRL+C et observez la conséquence sur
+l’affichage de tload.

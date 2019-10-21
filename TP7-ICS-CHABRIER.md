@@ -9,30 +9,54 @@ Loïs CHABRIER
 est présent dans votre environnement (vous pouvez aussi commenter son contenu).
 
 
+
 <span style='color:red'>2.</span> Modifiez le fichier /etc/default/grub pour que le menu de GRUB s’affiche pendant 10 secondes ;
 passé ce délai, le premier OS du menu doit être lancé automatiquement.
 
+Ajouter cette ligne : `GRUB_TIMEOUT=10 ; GRUB_TIMEOUT_STYLE=menu`
 
 <span style='color:red'>3.</span> Lancez la commande update-grub
 
+Exécuter la commande `update-grub`
 
 <span style='color:red'>4.</span> Redémarrez votre VM pour valider que les changements ont bien été pris en compte
+
 
 
 <span style='color:red'>5.</span> On va augmenter la résolution de GRUB et de notre VM. Cherchez sur Internet le ou les paramètres
 à rajouter au fichier grub.
 
+Ajouter cette ligne : `GRUB_GFXMODE=1280x1024,1024x768x32 GRUB_GFXPAYLOAD_LINUX=keep`
 
 <span style='color:red'>6.</span> On va à présent ajouter un fond d’écran. Il existe un paquet en proposant quelques uns : grub2-splash-images (après installation, celles-ci sont disponibles dans /usr/share/images/grub).
 
+Copier le fichier dans /boot/grub puis ajouter le paramètre `GRUB_BACKGROUND="chemin"`.
 
 <span style='color:red'>7.</span> Il est également possible de configurer des thèmes. On en trouve quelques uns dans les dépôts (grub2-themes-*). Installez-en un.
 
 
+
 <span style='color:red'>8.</span> Ajoutez une entrée permettant d’arrêter la machine, et une autre permettant de la redémarrer.
 
+Dans le fichier /etc/grub.d/40_custom :
+
+    menuentry ’Arrêter le système’ {
+    halt
+    }
+    menuentry ’Redémarrer le système’ {
+    reboot
+    }
 
 <span style='color:red'>9.</span> Configurer GRUB pour que le clavier soit en français
+
+`sudo mkdir /boot/grub/layouts` puis `sudo grub-kbdcomp -o /boot/grub/layouts/fr.gkb fr`
+
+Dans le fichier /etc/default/grub, ajouter la ligne `GRUB_TERMINAL_INPUT=at_keyboard`
+
+Dans le fichier /etc/grub.d/40_custom, ajouter les 2 lignes suivantes : 
+
+    insmod keylayouts
+    keymap fr
 
 
 ## Exercice 2. Noyau
